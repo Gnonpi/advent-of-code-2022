@@ -131,7 +131,6 @@ fn compute_round_score(round: &(u32, u32)) -> u32 {
     }
 }
 
-
 fn solve_one(parsed: AdventParsed) -> AdventResponse {
     let mut result = 0;
     for round in parsed.iter() {
@@ -142,8 +141,54 @@ fn solve_one(parsed: AdventParsed) -> AdventResponse {
     result
 }
 
+
+fn get_winner(sign: &u32) -> u32 {
+    match sign {
+        // Rock -> Paper
+        1 => 2,
+        // Paper -> Scissor
+        2 => 3,
+        // Scissor -> Rock
+        3 => 1,
+        _ => panic!()
+    }
+}
+
+
+fn find_counter(opponent: &u32, outcome: RoundOutcome) -> u32 {
+    // println!("opponent: {:?} - outcome: {:?}", opponent, outcome);
+    match outcome {
+        // draw: same as opponent
+        RoundOutcome::Draw => compute_round_score(&(*opponent, opponent - 10)),
+        RoundOutcome::Lose => compute_round_score(
+            // twice win gives you loser
+            &(*opponent, get_winner(&get_winner(&(opponent - 10))))
+        ),
+        RoundOutcome::Win => compute_round_score(
+            &(*opponent, get_winner(&(opponent - 10)))
+        ),
+        _ => panic!()
+    }
+}
+
+fn compute_counter(round: &(u32, u32)) -> u32 {
+    match round.1 {
+        // X: lose
+        1 => find_counter(&round.0, RoundOutcome::Lose),
+        // Y: draw
+        2 => find_counter(&round.0, RoundOutcome::Draw),
+        // Z: win
+        3 => find_counter(&round.0, RoundOutcome::Win),
+        _ => panic!()
+    }
+}
+
 fn solve_two(parsed: AdventParsed) -> AdventResponse {
-    todo!();
+    let mut result = 0;
+    for round in parsed.iter() {
+        result += compute_counter(round);
+    }
+    result
 }
 
 fn main() {
@@ -152,8 +197,8 @@ fn main() {
     let parsed = parse_input(raw_input);
     let first_solution = solve_one(parsed.clone());
     println!("First solution: {:?}", first_solution);
-    // let second_solution = solve_two(parsed);
-    // println!("Second solution: {:?}", second_solution);
+    let second_solution = solve_two(parsed);
+    println!("Second solution: {:?}", second_solution);
 }
 
 #[cfg(test)]
@@ -191,7 +236,20 @@ mod day1_test {
     }
 
     #[test]
+    fn it_can_find_counter() {
+        let a_y = compute_counter(&(11, 2));
+        assert_eq!(a_y, 4);
+        let b_x = compute_counter(&(12, 1));
+        assert_eq!(b_x, 1);
+        let c_z = compute_counter(&(13, 3));
+        assert_eq!(c_z, 7);
+    }
+
+    #[test]
     fn it_can_solve_example_part_2() {
-        todo!();
+        let example = String::from("A Y\nB X\nC Z");
+        let parsed = parse_input(example);
+        let result = solve_two(parsed);
+        assert_eq!(result, 12);
     }
 }
