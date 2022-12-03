@@ -30,3 +30,26 @@ It would have been cleaner if I used enum instead of int,
 I'm having to deal with offsets.
 The sign form a cycle: you can go forward/backward in it.
 I'll need to be smarter tomorrow.
+
+## Day 3
+
+After a walk with my father and the dog,
+let's do this.
+One type of item per compartment, each rucksacks has 2 compartments.
+Need to check the current configuration.
+Each line (rucksack) can be split in half (2 compartments).
+It's searching and eliminating items that are in both compartments.
+Priority of item is its position in alphabet (+ 26 if uppercase).
+Answer is the sum of priority value of duplicated values.
+Parsing and getting priority is okay. 
+HashSet are easier to use in Python,
+I don't get why `.intersection()` cannot return an instance of `HashSet`.
+Right answer on first try.
+There are now groups of 3 rucksacks, 
+we need to find the elements that comes up in every rucksack.
+Grouping by 3 lines should be ok,
+adapting my function to take 3 entries instead of 2 a bit bothersome.
+It went alright, I used an intermediate set 
+instead of juggling with the intersect object.
+First guess was correct.
+
