@@ -53,3 +53,17 @@ It went alright, I used an intermediate set
 instead of juggling with the intersect object.
 First guess was correct.
 
+## Day 4
+
+Had a long car trip,
+had a bit of time to think about the problem.
+It's guessing the inclusivity of intervals.
+Using size of range to reduce checks,
+just compare lower and upper bounds.
+With all the time to think, first star was easy.
+Next we want to check overlap between the two parts of the section.
+It's checking the left-right parts of the bounds of the two sections.
+I made a first attempt, 
+but I forgot to order the pair with the leftmost item first.
+The tests didn't pick it up.
+Second attempt was correct.
