@@ -5,7 +5,7 @@ pub(crate) struct WarehouseState<T> {
     piles: Vec<PileOfCrate<T>>
 }
 
-impl<T: Copy> WarehouseState<T> {
+impl<T: Copy + Clone> WarehouseState<T> {
     pub(crate) fn get_tops(&self) -> Vec<T> {
         let mut result = vec![];
         for p in self.piles.iter() {
@@ -22,6 +22,16 @@ impl<T: Copy> WarehouseState<T> {
             self.piles[idx_to as usize].add_on_top(el);
         }
     }
+
+    pub(crate) fn execute_command_9001(&mut self, instr: CraneInstruction) {
+        let idx_from = instr.from - 1;
+        let idx_to = instr.to - 1;
+        let pulled: Vec<T> = self.piles[idx_from as usize]
+            .pull_n(instr.quantity).into_iter().collect();
+        for el in pulled {
+            self.piles[idx_to as usize].add_on_top(el);
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Default, Clone)]
@@ -29,7 +39,7 @@ struct PileOfCrate<T> {
     pile: Vec<T>
 }
 
-impl<T> PileOfCrate<T> {
+impl<T: Clone> PileOfCrate<T> {
     fn add_on_top(&mut self, el: T) {
         self.pile.push(el);
     }
@@ -44,6 +54,13 @@ impl<T> PileOfCrate<T> {
 
     fn top(&self) -> Option<&T> {
         self.pile.last()
+    }
+
+    fn pull_n(&mut self, n: u32) -> Vec<T> {
+        let binding = self.pile.clone();
+        let (state, pulled) = binding.split_at(self.pile.len() - (n as usize));
+        self.pile = state.to_vec();
+        pulled.to_vec()
     }
 }
 
@@ -144,6 +161,43 @@ mod day_test {
                 PileOfCrate { pile: vec![] },
                 PileOfCrate { pile: vec!['M', 'C'] },
                 PileOfCrate { pile: vec!['P', 'D', 'N', 'Z'] },
+            ]
+        };
+        assert_eq!(initial, expected);
+    }
+
+    #[test]
+    fn it_can_pull_n() {
+        let mut p = PileOfCrate { pile: vec![1, 2 ,3] };
+        let pulled = p.pull_n(2);
+        assert_eq!(p, PileOfCrate { pile: vec![1] });
+        assert_eq!(pulled, vec![2, 3]);
+    }
+
+    #[test]
+    fn it_can_execute_command_9001() {
+        let mut initial = WarehouseState {
+            piles: vec![
+                PileOfCrate { pile: vec!['Z', 'N'] },
+                PileOfCrate { pile: vec!['M', 'C', 'D'] },
+                PileOfCrate { pile: vec!['P'] },
+            ]
+        };
+        initial.execute_command_9001(CraneInstruction {
+            quantity: 1, 
+            from: 2,
+            to: 1
+        });
+        initial.execute_command_9001(CraneInstruction {
+            quantity: 3, 
+            from: 1,
+            to: 3
+        });
+        let expected = WarehouseState {
+            piles: vec![
+                PileOfCrate { pile: vec![] },
+                PileOfCrate { pile: vec!['M', 'C'] },
+                PileOfCrate { pile: vec!['P', 'Z', 'N', 'D'] },
             ]
         };
         assert_eq!(initial, expected);

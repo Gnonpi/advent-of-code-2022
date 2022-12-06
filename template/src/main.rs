@@ -37,16 +37,19 @@ fn get_puzzle_input() -> String {
     resp
 }
 
+
 type AdventParsed = ;
 type AdventResponse = ;
 
 fn parse_input(puzzle_input: String) -> AdventParsed {
     let mut result = vec![];
+    todo!();
 }
 
 fn solve_one(parsed: AdventParsed) -> AdventResponse {
     let mut result = 0;
     for x in parsed.iter() {
+        todo!();
     }
     result
 }
@@ -54,6 +57,7 @@ fn solve_one(parsed: AdventParsed) -> AdventResponse {
 fn solve_two(parsed: AdventParsed) -> AdventResponse {
     let mut result = 0;
     for x in parsed.iter() {
+        todo!();
     }
     result
 }

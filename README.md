@@ -67,3 +67,21 @@ I made a first attempt,
 but I forgot to order the pair with the leftmost item first.
 The tests didn't pick it up.
 Second attempt was correct.
+
+## Day 5
+
+Let's move things into a template folder.
+It's about re-arranging crates, 
+following a sequence of instructions to move elements,
+and read the top of each pile.
+And just that day the problem is complex enough to be splitted in modules.
+All those structures to parse is a bit of a pain.
+I should add logging in the template.
+Argh it was my test case that was wrong, I lost 20mn on this.
+Once the parsing and concat done,
+solving the problem is easy.
+Got the answer on first attempt.
+Next part is just changing the way the crates are moved.
+A bit of move issue with the `split_at` method.
+And done in one try.
+Strings with Rust is not easy.

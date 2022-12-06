@@ -93,11 +93,12 @@ fn solve_one(parsed: AdventParsed) -> AdventResponse {
 }
 
 fn solve_two(parsed: AdventParsed) -> AdventResponse {
-    // let mut result = 0;
-    // for x in parsed.iter() {
-    // }
-    // result
-    todo!();
+    let mut warehouse = parsed.initial.clone();
+    for instr in parsed.instructions.iter() {
+        warehouse.execute_command_9001(instr.clone());
+    }
+    let tops = warehouse.get_tops();
+    String::from_iter(tops.iter())
 }
 
 fn main() {
@@ -152,8 +153,8 @@ move 1 from 1 to 2";
 
     #[test]
     fn it_can_solve_example_part_2() {
-        // let parsed = parse_input(EXAMPLE.to_string());
-        // let result = solve_two(parsed);
-        // assert_eq!(result, 4);
+        let parsed = parse_input(EXAMPLE.to_string());
+        let result = solve_two(parsed);
+        assert_eq!(result, "MCD".to_string());
     }
 }
