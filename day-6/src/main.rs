@@ -52,20 +52,23 @@ fn is_unique_char(sliced: &[char]) -> bool {
     previous_len == set_sliced.len()
 }
 
-fn solve_one(parsed: AdventParsed) -> AdventResponse {
-    let chars: Vec<char> = parsed.chars().collect();
-    let scan_size = 4;
-    for i in 0..parsed.len() {
+fn find_first_group_distinct(input_string: String, scan_size: usize) -> Option<u32> {
+    let chars: Vec<char> = input_string.chars().collect();
+    for i in 0..input_string.len() {
         let sliced = &chars[i..i + scan_size];
         if is_unique_char(sliced) {
-            return (i + scan_size) as AdventResponse
+            return Some((i + scan_size) as AdventResponse)
         }
     }
-    panic!("not found sequence");
+    None
+}
+
+fn solve_one(parsed: AdventParsed) -> AdventResponse {
+    find_first_group_distinct(parsed, 4).unwrap()
 }
 
 fn solve_two(parsed: AdventParsed) -> AdventResponse {
-    todo!();
+    find_first_group_distinct(parsed, 14).unwrap()
 }
 
 fn main() {
@@ -106,8 +109,16 @@ mod day_test {
 
     #[test]
     fn it_can_solve_example_part_2() {
-        todo!();
-        // let result = solve_two(parsed);
-        // assert_eq!(result, 4);
+        let cases = vec![
+            ("mjqjpqmgbljsphdztnvjfqwrcgsmlb", 19),
+            ("bvwbjplbgvbhsrlpgdmjqwftvncz", 23),
+            ("nppdvjthqldpwncqszvftbrmjlhg", 23),
+            ("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", 29),
+            ("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", 26),
+        ];
+        for (input_str, expected) in cases.iter() {
+            let result = solve_two(input_str.to_string());
+            assert_eq!(result, *expected);
+        }
     }
 }
