@@ -85,3 +85,20 @@ Next part is just changing the way the crates are moved.
 A bit of move issue with the `split_at` method.
 And done in one try.
 Strings with Rust is not easy.
+
+## Day 6
+
+It was a quiet day, let's start.
+The template is copied.
+It's about detecting the position of the 
+first 4 chars that are different.
+More strings!
+`Iterator.next_chunk` would have been perfect, 
+but it's in nightly only.
+First start was quite easy,
+working with string->char and a hashset to identify distinct sequence.
+The second part is making a scan with 14 chars instead of 4.
+It shouldn't be a problem to adapt my functions.
+It took me like 3 minutes to get the second star.
+It seemed super easy. 
+Maybe it was my code that hadn't the "4" value hardcoded?
