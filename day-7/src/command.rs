@@ -7,7 +7,7 @@ pub(crate) enum CdDestination {
 
 #[derive(Debug, PartialEq, Clone)]
 pub(crate) struct CdCommand {
-    destination: CdDestination,
+    pub(crate) destination: CdDestination,
 }
 
 impl From<String> for CdCommand {
@@ -35,9 +35,9 @@ pub(crate) enum LsElementType {
 
 #[derive(Debug, PartialEq, Clone)]
 pub(crate) struct LsElement {
-    ls_type: LsElementType,
-    name: String,
-    total_size: usize,
+    pub(crate) ls_type: LsElementType,
+    pub(crate) name: String,
+    pub(crate) total_size: usize,
 }
 
 impl From<String> for LsElement {
@@ -61,7 +61,7 @@ impl From<String> for LsElement {
 
 #[derive(Debug, PartialEq, Clone)]
 pub(crate) struct LsCommand {
-    elements: Vec<LsElement>,
+    pub(crate) elements: Vec<LsElement>,
 }
 
 impl From<String> for LsCommand {
@@ -106,7 +106,7 @@ pub(crate) fn parse_commands(input_string: String) -> Vec<Command> {
 }
 
 #[cfg(test)]
-mod day_test {
+mod command_test {
     use super::*;
 
     #[test]

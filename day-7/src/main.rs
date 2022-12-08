@@ -2,7 +2,9 @@ use reqwest::blocking::Client;
 use reqwest::header;
 use std::time::Duration;
 mod command;
+mod file_tree;
 use command::{parse_commands, Command};
+use file_tree::{FileTree, File};
 
 const DAY: u8 = 7;
 
@@ -47,17 +49,38 @@ fn parse_input(puzzle_input: String) -> AdventParsed {
 }
 
 fn solve_one(parsed: AdventParsed) -> AdventResponse {
+    let ft = FileTree::from(parsed);
+    let dirs = ft.get_directories();
     let mut result = 0;
-    for x in parsed.iter() {
-        todo!();
+    for dir in dirs {
+        if dir.total_size <= 100000 {
+            result += dir.total_size;
+        }
     }
     result
 }
 
 fn solve_two(parsed: AdventParsed) -> AdventResponse {
-    let mut result = 0;
-    for x in parsed.iter() {
-        todo!();
+    let ft = FileTree::from(parsed);
+    let dirs = ft.get_directories();
+    let total_space = 70000000;
+    let needed_space = 30000000;
+    // size of outermost directory
+    let files = ft.get_directories();
+    let root_folder = files.iter().filter(|x| x.name == "/").collect::<Vec<&File>>()[0];
+    let outermost_size = root_folder.total_size;
+    // println!("outermost: {:?}", outermost_size);
+    // min size = needed - (total - outermost)
+    let unused_space = total_space - outermost_size;
+    let min_size = needed_space - unused_space;
+    // println!("min_size: {:?}", min_size);
+    // iterate over folders
+    let mut result = outermost_size;
+    for dir in files.iter() {
+        // println!("dir: {:?}", dir.total_size);
+        if dir.total_size >= min_size && dir.total_size < result  {
+            result = dir.total_size;
+        }
     }
     result
 }
@@ -76,27 +99,41 @@ fn main() {
 mod day_test {
     use super::*;
 
-    const EXAMPLE: &str = "";
-
-    #[test]
-    fn it_can_parse_example() {
-        let parsed = parse_input(EXAMPLE.to_string());
-        let expected = vec![];
-        assert_eq!(parsed[0], expected[0]);
-        assert_eq!(parsed, expected);
-    }
+    const EXAMPLE: &str = "$ cd /
+$ ls
+dir a
+14848514 b.txt
+8504156 c.dat
+dir d
+$ cd a
+$ ls
+dir e
+29116 f
+2557 g
+62596 h.lst
+$ cd e
+$ ls
+584 i
+$ cd ..
+$ cd ..
+$ cd d
+$ ls
+4060174 j
+8033020 d.log
+5626152 d.ext
+7214296 k";
 
     #[test]
     fn it_can_solve_example_part_1() {
         let parsed = parse_input(EXAMPLE.to_string());
         let result = solve_one(parsed);
-        assert_eq!(result, 2);
+        assert_eq!(result, 95437);
     }
 
     #[test]
     fn it_can_solve_example_part_2() {
         let parsed = parse_input(EXAMPLE.to_string());
         let result = solve_two(parsed);
-        assert_eq!(result, 4);
+        assert_eq!(result, 24933642);
     }
 }
