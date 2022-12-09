@@ -102,3 +102,35 @@ It shouldn't be a problem to adapt my functions.
 It took me like 3 minutes to get the second star.
 It seemed super easy. 
 Maybe it was my code that hadn't the "4" value hardcoded?
+
+## Day 7
+
+Haut les coeurs!
+I saw some bash commands in the problem statement,
+it's going to be fun parsing that in Rust :harold:.
+So it's going to be parsing simplified `cd` and `ls`,
+get a listing of the directories,
+get the ones that are big enough.
+Should I keep the tree information or is flat ok?
+In the example, `a/` contains `e/` that contains the file,
+so the structure is important.
+Abusing `From<String>` to parse the input.
+I didn't want to implement a recursive tree in Rust
+(maybe another time),
+so I went with a more iterative approach.
+It took a loooong time (it's 1am),
+but I managed to get the first star.
+I'm going to bed.
+Second part should be easy enough for tomorrow.
+In the morning, yes, second part was easier 
+now that the abstractions are built correctly.
+
+## Day 8
+
+Let's do this.
+So we have a map of trees, with their height,
+and we need to find a sort of ranking from each direction.
+First attempt is way too high.
+But I'm not sure where I made a mistake?
+I might let it go for today: 
+maybe I'll go back to it this weekend.
