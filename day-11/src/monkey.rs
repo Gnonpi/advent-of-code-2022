@@ -3,13 +3,12 @@ use std::fmt::Debug;
 use std::fmt::Formatter;
 use core::fmt::Error;
 
-type MonkeyNumber = u8;
+type MonkeyNumber = usize;
 type WorryItem = usize;
 
 #[derive(Debug)]
 pub(crate) struct MonkeyArena {
     round: usize,
-    current_monkey: MonkeyNumber,
     pub(crate) monkeys: Vec<Monkey>,
 }
 
@@ -17,17 +16,27 @@ impl MonkeyArena {
     pub(crate) fn new() -> Self {
         MonkeyArena {
             round: 0,
-            current_monkey: 0,
             monkeys: Vec::new()
         }
     }
 
-    fn get_monkey_business(&self) -> usize {
-        todo!();
+    pub(crate) fn get_monkey_business(&self) -> Vec<usize> {
+        let mut results = vec![];
+        for i_monkey in 0..self.monkeys.len() {
+            results.push(self.monkeys[i_monkey].inspect_count)
+        }
+        results
     }
 
-    fn play_round(&mut self) {
-        todo!();
+    pub(crate) fn play_round(&mut self) {
+        for i_monkey in 0..self.monkeys.len() {
+            let processed = self.monkeys[i_monkey].process_items();
+            for res in processed {
+                let (dest, item) = res;
+                self.monkeys[dest].items.push(item);
+            }
+        }
+        self.round += 1;
     }
 }
 
@@ -52,20 +61,6 @@ impl Debug for Monkey {
             .finish()
     }
 }
-
-// impl Clone for Monkey {
-//     fn clone(&self) -> Self {
-//         Monkey {
-//             number: self.number.clone(),
-//             items: self.items.clone(),
-//             inspect_count: self.inspect_count.clone(),
-//             operation: Box::new(self.operation.copy()),
-//             condition: Box::new(self.condition.copy()),
-//             send_true: self.send_true.clone(),
-//             send_false: self.send_false.clone(),
-//         }  
-//     }
-// }
 
 impl PartialEq for Monkey {
     fn eq(&self, other: &Self) -> bool {
@@ -149,18 +144,43 @@ impl From<String> for Monkey {
     }
 }
 
+impl Monkey {
+    fn process_one_item(&self, item: WorryItem) -> (MonkeyNumber, WorryItem) {
+        let after_op = (self.operation)(item);
+        let after_divide = after_op / 3;
+        match (self.condition)(after_divide) {
+            true => (self.send_true, after_divide),
+            false => (self.send_false, after_divide),
+        }
+    }
+
+    fn process_items(&mut self) -> Vec<(MonkeyNumber, WorryItem)> {
+        let mut results = vec![];
+        for item in self.items.iter().cloned() {
+            self.inspect_count += 1;
+            let res = self.process_one_item(item);
+            results.push(res);
+        }
+        // cannot drain and process_one_item?
+        self.items = vec![];
+        results
+    } 
+}
+
 #[cfg(test)]
 mod monkey_test {
     use super::*;
 
+    const MONKEY_0: &str = "Monkey 0:
+    Starting items: 79, 98
+    Operation: new = old * 19
+    Test: divisible by 23
+      If true: throw to monkey 2
+      If false: throw to monkey 3";
+
     #[test]
     fn it_can_parse_monkey_0() {
-        let monkey_0_in = "Monkey 0:
-        Starting items: 79, 98
-        Operation: new = old * 19
-        Test: divisible by 23
-          If true: throw to monkey 2
-          If false: throw to monkey 3".to_string();
+        let monkey_0_in = MONKEY_0.to_string();
         let expected = Monkey {
             number: 0,
             items: vec![79, 98],
@@ -172,5 +192,19 @@ mod monkey_test {
         };
         let monkey = Monkey::from(monkey_0_in);
         assert_eq!(monkey, expected);
+    }
+
+    #[test]
+    fn it_can_process_items() {
+        let monkey_0_in = MONKEY_0.to_string();
+        let mut monkey = Monkey::from(monkey_0_in);
+        let results = monkey.process_items();
+        let expected = vec![
+            (3, 500),
+            (3, 620),
+        ];
+        
+        assert_eq!(monkey.items, vec![]);
+        assert_eq!(results, expected);
     }
 }

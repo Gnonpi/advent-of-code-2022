@@ -191,5 +191,8 @@ We're not concerned about what objects they have at the end of the rounds,
 but I'll still keep it.
 It's a bit of a mess because of function pointers,
 I wish it was easier.
+While I'm not super proud of that solution,
+I've learned a lot and got it right!
+
 
 

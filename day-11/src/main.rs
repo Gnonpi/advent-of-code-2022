@@ -53,8 +53,19 @@ fn parse_input(puzzle_input: String) -> AdventParsed {
     arena
 }
 
-fn solve_one(parsed: AdventParsed) -> AdventResponse {
-    todo!();
+fn solve_one(mut arena: AdventParsed) -> AdventResponse {
+    let total_round = 20;
+    for r in 0..(total_round) {
+        arena.play_round();
+    }
+    let mut businesses = arena.get_monkey_business();
+    println!("businesses: {:?}", businesses);
+    businesses.sort();
+    businesses.reverse();
+    let top_two = &businesses[..2];
+    assert_eq!(top_two.len(), 2);
+    println!("top_two: {:?}", top_two);
+    top_two[0] * top_two[1]
 }
 
 fn solve_two(parsed: AdventParsed) -> AdventResponse {
@@ -64,7 +75,7 @@ fn solve_two(parsed: AdventParsed) -> AdventResponse {
 fn main() {
     read_cookie_value();
     let raw_input = get_puzzle_input();
-    let parsed = parse_input(raw_input.clone());
+    let mut parsed = parse_input(raw_input.clone());
     let first_solution = solve_one(parsed);
     println!("First solution: {:?}", first_solution);
     let parsed = parse_input(raw_input);
@@ -115,9 +126,9 @@ mod day_11_test {
 
     #[test]
     fn it_can_solve_example_part_1() {
-        let parsed = parse_input(INPUT_MONKEYS.to_string());
+        let mut parsed = parse_input(INPUT_MONKEYS.to_string());
         let result = solve_one(parsed);
-        assert_eq!(result, 2);
+        assert_eq!(result, 10605);
     }
 
     #[test]
