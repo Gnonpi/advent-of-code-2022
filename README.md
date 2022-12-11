@@ -162,6 +162,23 @@ There are 10 nodes (H, 1 ... 8, T).
 Creating that new struct when super fine.
 Got the next star on first attempt.
 
+## Day 10
 
+I finished day 9 quite ok,
+let's move to yesterday's challenge.
+So it's a problem so increasing/decreasing a register
+with some cycle skips. 
+And then reading some values at defined cycles.
+We need to keep the value at every cycle,
+if it's a few hundreds/thousands, it should be ok.
+First iterative approach is not okay, too complicated.
+Maybe I can "paint" a vector.
+I went with painting, it's then a bit of map+reduce and we're done!
+Second part, we need to iterate over our registers,
+and if the register value is around the counter, draw one.
+Got the solution, but I'm perplex as the solution
+needed a human eye or something to read the letters.
+
+## Day 11
 
 
