@@ -155,5 +155,13 @@ but skipping it.
 
 The second part is about extending from 2 points to n points.
 That's interesting.
+I'm starting by splitting into modules,
+I'll probably add a new struct that takes the solution of part1
+and apply it as a cord.
+There are 10 nodes (H, 1 ... 8, T).
+Creating that new struct when super fine.
+Got the next star on first attempt.
+
+
 
 
