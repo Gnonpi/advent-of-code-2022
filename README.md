@@ -193,6 +193,13 @@ It's a bit of a mess because of function pointers,
 I wish it was easier.
 While I'm not super proud of that solution,
 I've learned a lot and got it right!
+I guess the second part is just changing a 20 to 10000?
+I got an overflow error when squaring a number.
+Changing to f64 solved the overflow 
+but broke the rest of behaviours.
+I managed to get it to almost work, 
+but I might skip that second star for now.
+
 
 
 

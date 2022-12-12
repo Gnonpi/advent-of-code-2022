@@ -4,11 +4,12 @@ use std::fmt::Formatter;
 use core::fmt::Error;
 
 type MonkeyNumber = usize;
-type WorryItem = usize;
+type WorryItem = f64;
 
 #[derive(Debug)]
 pub(crate) struct MonkeyArena {
     round: usize,
+    no_worries: bool,
     pub(crate) monkeys: Vec<Monkey>,
 }
 
@@ -16,6 +17,7 @@ impl MonkeyArena {
     pub(crate) fn new() -> Self {
         MonkeyArena {
             round: 0,
+            no_worries: false,
             monkeys: Vec::new()
         }
     }
@@ -38,12 +40,19 @@ impl MonkeyArena {
         }
         self.round += 1;
     }
+
+    pub(crate) fn set_no_worries(&mut self, value: bool) {
+        for monkey in self.monkeys.iter_mut() {
+            monkey.no_worries = value;
+        }
+    }
 }
 
 pub(crate) struct Monkey {
     number: MonkeyNumber,
     items: Vec<WorryItem>,
     inspect_count: usize,
+    no_worries: bool,
     operation: Box<dyn Fn(WorryItem) -> WorryItem>,
     condition: Box<dyn Fn(WorryItem) -> bool>,
     send_true: MonkeyNumber,
@@ -56,6 +65,7 @@ impl Debug for Monkey {
             .field("number", &self.number)
             .field("items", &self.items)
             .field("inspect_count", &self.inspect_count)
+            .field("no_worries", &self.no_worries)
             .field("send_true", &self.send_true)
             .field("send_false", &self.send_false)
             .finish()
@@ -67,6 +77,7 @@ impl PartialEq for Monkey {
         self.number == other.number &&
         self.items == other.items &&
         self.inspect_count == other.inspect_count &&
+        self.no_worries == other.no_worries &&
         self.send_true == other.send_true &&
         self.send_false == other.send_false
     }
@@ -89,8 +100,8 @@ fn op_creator(lh: String, operator: String, rh: String) -> Box<dyn Fn(WorryItem)
     }
 }
 
-fn cond_creator(num: usize) -> Box<dyn Fn(WorryItem) -> bool> {
-    Box::new(move |x| { (x % num) == 0 })
+fn cond_creator(num: f64) -> Box<dyn Fn(WorryItem) -> bool> {
+    Box::new(move |x| { (x % num) == 0.0 })
 }
 
 impl From<String> for Monkey {
@@ -121,7 +132,7 @@ impl From<String> for Monkey {
         let operation = op_creator(op_lh, op_or, op_rh);
         // test func
         let (_, right) = lines[3].split_once("divisible by ").unwrap();
-        let condition = cond_creator(right.parse::<usize>().unwrap());
+        let condition = cond_creator(right.parse::<f64>().unwrap());
         // send_true
         let re_throw_to = Regex::new(r"throw to monkey (\d+)").unwrap();
         let caps_send_true = re_throw_to.captures(&lines[4]).unwrap();
@@ -135,6 +146,7 @@ impl From<String> for Monkey {
         Monkey {
             number: monkey_num,
             inspect_count: 0,
+            no_worries: false,
             items: starting_nums,
             operation,
             condition,
@@ -147,7 +159,15 @@ impl From<String> for Monkey {
 impl Monkey {
     fn process_one_item(&self, item: WorryItem) -> (MonkeyNumber, WorryItem) {
         let after_op = (self.operation)(item);
-        let after_divide = after_op / 3;
+        let mut after_divide = after_op;
+        if !self.no_worries {
+            after_divide = (after_op / 3.0).floor();
+        } else {
+            // ahah
+        }
+        if after_divide == 0.0 {
+            println!("it's 0");
+        }
         match (self.condition)(after_divide) {
             true => (self.send_true, after_divide),
             false => (self.send_false, after_divide),
@@ -167,6 +187,15 @@ impl Monkey {
     } 
 }
 
+pub(crate) fn compute_monkey_business(mut arena: MonkeyArena, rounds: usize, no_worries: bool) -> Vec<usize> {
+    arena.set_no_worries(no_worries);
+    for r in 0..rounds {
+        arena.play_round();
+    }
+    let businesses = arena.get_monkey_business();
+    businesses
+}
+
 #[cfg(test)]
 mod monkey_test {
     use super::*;
@@ -177,16 +206,17 @@ mod monkey_test {
     Test: divisible by 23
       If true: throw to monkey 2
       If false: throw to monkey 3";
-
+   
     #[test]
     fn it_can_parse_monkey_0() {
         let monkey_0_in = MONKEY_0.to_string();
         let expected = Monkey {
             number: 0,
-            items: vec![79, 98],
+            items: vec![79.0, 98.0],
             inspect_count: 0,
-            operation: Box::new(    |old| old * 19),
-            condition: Box::new(|x| x % 23 == 0),
+            no_worries: false,
+            operation: Box::new(|old| old * 19.0),
+            condition: Box::new(|x| x % 23.0 == 0.0),
             send_true: 2,
             send_false: 3,
         };
@@ -200,8 +230,8 @@ mod monkey_test {
         let mut monkey = Monkey::from(monkey_0_in);
         let results = monkey.process_items();
         let expected = vec![
-            (3, 500),
-            (3, 620),
+            (3, 500.0),
+            (3, 620.0),
         ];
         
         assert_eq!(monkey.items, vec![]);

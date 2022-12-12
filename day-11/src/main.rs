@@ -2,7 +2,7 @@ use reqwest::blocking::Client;
 use reqwest::header;
 use std::time::Duration;
 mod monkey;
-use monkey::{MonkeyArena, Monkey};
+use monkey::{MonkeyArena, Monkey, compute_monkey_business};
 
 const DAY: u8 = 11;
 
@@ -59,23 +59,28 @@ fn solve_one(mut arena: AdventParsed) -> AdventResponse {
         arena.play_round();
     }
     let mut businesses = arena.get_monkey_business();
+    // println!("businesses: {:?}", businesses);
+    businesses.sort();
+    businesses.reverse();
+    let top_two = &businesses[..2];
+    // println!("top_two: {:?}", top_two);
+    top_two[0] * top_two[1]
+}
+
+fn solve_two(mut arena: AdventParsed) -> AdventResponse {
+    let mut businesses = compute_monkey_business(arena, 10_000, true);
     println!("businesses: {:?}", businesses);
     businesses.sort();
     businesses.reverse();
     let top_two = &businesses[..2];
-    assert_eq!(top_two.len(), 2);
     println!("top_two: {:?}", top_two);
     top_two[0] * top_two[1]
-}
-
-fn solve_two(parsed: AdventParsed) -> AdventResponse {
-    todo!();
 }
 
 fn main() {
     read_cookie_value();
     let raw_input = get_puzzle_input();
-    let mut parsed = parse_input(raw_input.clone());
+    let parsed = parse_input(raw_input.clone());
     let first_solution = solve_one(parsed);
     println!("First solution: {:?}", first_solution);
     let parsed = parse_input(raw_input);
@@ -126,15 +131,37 @@ mod day_11_test {
 
     #[test]
     fn it_can_solve_example_part_1() {
-        let mut parsed = parse_input(INPUT_MONKEYS.to_string());
+        let parsed = parse_input(INPUT_MONKEYS.to_string());
         let result = solve_one(parsed);
         assert_eq!(result, 10605);
+    }
+
+
+    #[test]
+    fn it_can_compute_business() {
+        println!("Row 1");
+        let parsed = parse_input(INPUT_MONKEYS.to_string());
+        let business = compute_monkey_business(parsed, 1, true);
+        let expected = vec![2, 4, 3, 6];
+        assert_eq!(business, expected);
+
+        println!("Row 20");
+        let parsed = parse_input(INPUT_MONKEYS.to_string());
+        let business = compute_monkey_business(parsed, 20, true);
+        let expected = vec![99, 97, 8, 103];
+        assert_eq!(business, expected);
+
+        println!("Row 1000");
+        let parsed = parse_input(INPUT_MONKEYS.to_string());
+        let business = compute_monkey_business(parsed, 1000, true);
+        let expected = vec![5204, 4792, 199, 5192];
+        assert_eq!(business, expected);
     }
 
     #[test]
     fn it_can_solve_example_part_2() {
         let parsed = parse_input(INPUT_MONKEYS.to_string());
         let result = solve_two(parsed);
-        assert_eq!(result, 4);
+        assert_eq!(result, 2713310158);
     }
 }
