@@ -200,6 +200,12 @@ but broke the rest of behaviours.
 I managed to get it to almost work, 
 but I might skip that second star for now.
 
+## Day 12
 
+Ok, today was a weird day,
+let's try and do things.
+Today's problem is a bit of path finding,
+but with only following the next char, 
+it's going to be following the path.
 
 
