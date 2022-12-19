@@ -181,4 +181,25 @@ needed a human eye or something to read the letters.
 
 ## Day 11
 
+Let's go, three in a day!
+I'm starting to get cold, my windows are not super isolating I guess.
+Wow, the problem seems complicated.
+It's monkeys passing objects around:
+it looks like some state machines.
+I think I'll start by modelling the monkeys.
+We're not concerned about what objects they have at the end of the rounds,
+but I'll still keep it.
+It's a bit of a mess because of function pointers,
+I wish it was easier.
+While I'm not super proud of that solution,
+I've learned a lot and got it right!
+I guess the second part is just changing a 20 to 10000?
+I got an overflow error when squaring a number.
+Changing to f64 solved the overflow 
+but broke the rest of behaviours.
+I managed to get it to almost work, 
+but I might skip that second star for now.
+
+
+
 
