@@ -134,3 +134,34 @@ First attempt is way too high.
 But I'm not sure where I made a mistake?
 I might let it go for today: 
 maybe I'll go back to it this weekend.
+
+## Day 9
+
+After yesterday hardship,
+let's hope for a better day today.
+Ok, so it's a Head followed by a Tail,
+I think we can ditch the grid and focus on coordinates.
+
+I'm taking back the challenge on the 11th,
+didn't finish the challenge on Friday
+and took yesterday off.
+
+After nothing that the head and tail can overlap,
+plus that the tail only move when it's not adjacent,
+everything is working fine.
+First star collected.
+I got one position weird in my test (4-4 becoming a 0-0),
+but skipping it.
+
+The second part is about extending from 2 points to n points.
+That's interesting.
+I'm starting by splitting into modules,
+I'll probably add a new struct that takes the solution of part1
+and apply it as a cord.
+There are 10 nodes (H, 1 ... 8, T).
+Creating that new struct when super fine.
+Got the next star on first attempt.
+
+
+
+
