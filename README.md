@@ -102,3 +102,83 @@ It shouldn't be a problem to adapt my functions.
 It took me like 3 minutes to get the second star.
 It seemed super easy. 
 Maybe it was my code that hadn't the "4" value hardcoded?
+
+## Day 7
+
+Haut les coeurs!
+I saw some bash commands in the problem statement,
+it's going to be fun parsing that in Rust :harold:.
+So it's going to be parsing simplified `cd` and `ls`,
+get a listing of the directories,
+get the ones that are big enough.
+Should I keep the tree information or is flat ok?
+In the example, `a/` contains `e/` that contains the file,
+so the structure is important.
+Abusing `From<String>` to parse the input.
+I didn't want to implement a recursive tree in Rust
+(maybe another time),
+so I went with a more iterative approach.
+It took a loooong time (it's 1am),
+but I managed to get the first star.
+I'm going to bed.
+Second part should be easy enough for tomorrow.
+In the morning, yes, second part was easier 
+now that the abstractions are built correctly.
+
+## Day 8
+
+Let's do this.
+So we have a map of trees, with their height,
+and we need to find a sort of ranking from each direction.
+First attempt is way too high.
+But I'm not sure where I made a mistake?
+I might let it go for today: 
+maybe I'll go back to it this weekend.
+
+## Day 9
+
+After yesterday hardship,
+let's hope for a better day today.
+Ok, so it's a Head followed by a Tail,
+I think we can ditch the grid and focus on coordinates.
+
+I'm taking back the challenge on the 11th,
+didn't finish the challenge on Friday
+and took yesterday off.
+
+After nothing that the head and tail can overlap,
+plus that the tail only move when it's not adjacent,
+everything is working fine.
+First star collected.
+I got one position weird in my test (4-4 becoming a 0-0),
+but skipping it.
+
+The second part is about extending from 2 points to n points.
+That's interesting.
+I'm starting by splitting into modules,
+I'll probably add a new struct that takes the solution of part1
+and apply it as a cord.
+There are 10 nodes (H, 1 ... 8, T).
+Creating that new struct when super fine.
+Got the next star on first attempt.
+
+## Day 10
+
+I finished day 9 quite ok,
+let's move to yesterday's challenge.
+So it's a problem so increasing/decreasing a register
+with some cycle skips. 
+And then reading some values at defined cycles.
+We need to keep the value at every cycle,
+if it's a few hundreds/thousands, it should be ok.
+First iterative approach is not okay, too complicated.
+Maybe I can "paint" a vector.
+I went with painting, it's then a bit of map+reduce and we're done!
+Second part, we need to iterate over our registers,
+and if the register value is around the counter, draw one.
+Got the solution, but I'm perplex as the solution
+needed a human eye or something to read the letters.
+
+## Day 11
+
+

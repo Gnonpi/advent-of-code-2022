@@ -138,7 +138,7 @@ fn main() {
 }
 
 #[cfg(test)]
-mod day1_test {
+mod day3_test {
     use super::*;
 
     const EXAMPLE: &str = "vJrwpWtwJgWrhcsFMMfFFhFp\n
