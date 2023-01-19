@@ -200,6 +200,25 @@ but broke the rest of behaviours.
 I managed to get it to almost work, 
 but I might skip that second star for now.
 
+## Day 14
 
-
+We get a list of path with `(x, y)` coordinates 
+(right, down).
+The sequence forms horizontal or vertical lines.
+The sand is pouring from `(500, 0)`.
+The sand is pouring one block per frame,
+either down or diagonal left or diagonal right.
+We need to count how many grains of sand
+come to rest before flowing forever?
+I went with Rust as the parsing doesn't look complicated.
+We have to keep track of all the points,
+not only the top ones because like in the example,
+you can have a roof that's almost filled.
+A simple set of inserted points worked alright.
+Some helping functions and it's done.
+Got the right answer on first try.
+The second part is about adding a line 
+at the bottom of the grid.
+Adding a floor a bit brutally, but it's working.
+I had a one-off error and had to retry once.
 

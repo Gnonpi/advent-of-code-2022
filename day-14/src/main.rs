@@ -42,17 +42,17 @@ fn get_puzzle_input() -> String {
     resp
 }
 
-
 type AdventParsed = Vec<Vec<Point>>;
 type AdventResponse = usize;
 
 const STARTING_FALL: Point = Point { x: 500, y: 0 };
 
-
 fn parse_line(line: String) -> Vec<Point> {
-    line.split(" -> ").into_iter().map(|s| Point::from(s.to_string())).collect()
+    line.split(" -> ")
+        .into_iter()
+        .map(|s| Point::from(s.to_string()))
+        .collect()
 }
-
 
 fn parse_input(puzzle_input: String) -> AdventParsed {
     let mut result = vec![];
@@ -65,37 +65,48 @@ fn parse_input(puzzle_input: String) -> AdventParsed {
     result
 }
 
-fn solve_one(parsed: AdventParsed) -> AdventResponse {
-    // Create Grid with walls
+fn prepare_grid(parsed: AdventParsed) -> FallingGrid {
     let mut fg = FallingGrid::default();
     for line in parsed.iter() {
         let mut previous = line[0];
         for point in line.iter().cloned() {
             if previous == point {
-                continue
+                continue;
             }
             fg.add_line(previous, point);
             previous = point;
         }
     }
+    fg
+}
+
+fn solve_one(parsed: AdventParsed) -> AdventResponse {
+    // Create Grid with walls
+    let mut fg = prepare_grid(parsed);
     // Make grains fall
     let mut last_status = GrainStatus::Stopped;
     let mut count_grain: usize = 0;
     while last_status == GrainStatus::Stopped {
-        last_status = fg.fall_one_sand(STARTING_FALL.clone());
+        last_status = fg.fall_one_sand(STARTING_FALL);
         if last_status == GrainStatus::Stopped {
-            count_grain = count_grain + 1;
+            count_grain += 1;
         }
     }
     count_grain
 }
 
 fn solve_two(parsed: AdventParsed) -> AdventResponse {
-    let mut result = 0;
-    for x in parsed.iter() {
-        todo!();
+    // Create Grid with walls
+    let mut fg = prepare_grid(parsed);
+    // Add floor at bottom
+    fg.set_floor();
+    // Make grains fall
+    let mut count_grain: usize = 0;
+    while fg.is_point_free(&STARTING_FALL) {
+        fg.fall_one_sand(STARTING_FALL);
+        count_grain += 1;
     }
-    result
+    count_grain - 1
 }
 
 fn main() {
@@ -120,9 +131,9 @@ mod day_test {
         let line = String::from("498,4 -> 498,6 -> 496,6");
         let result = parse_line(line);
         let expected = vec![
-            Point {x: 498, y: 4},
-            Point {x: 498, y: 6},
-            Point {x: 496, y: 6},
+            Point { x: 498, y: 4 },
+            Point { x: 498, y: 6 },
+            Point { x: 496, y: 6 },
         ];
         assert_eq!(result, expected);
     }
@@ -132,15 +143,15 @@ mod day_test {
         let parsed = parse_input(EXAMPLE.to_string());
         let expected = vec![
             vec![
-                Point {x: 498, y: 4},
-                Point {x: 498, y: 6},
-                Point {x: 496, y: 6},
+                Point { x: 498, y: 4 },
+                Point { x: 498, y: 6 },
+                Point { x: 496, y: 6 },
             ],
             vec![
-                Point {x: 503, y: 4},
-                Point {x: 502, y: 4},
-                Point {x: 502, y: 9},
-                Point {x: 494, y: 9},
+                Point { x: 503, y: 4 },
+                Point { x: 502, y: 4 },
+                Point { x: 502, y: 9 },
+                Point { x: 494, y: 9 },
             ],
         ];
         assert_eq!(parsed[0], expected[0]);
@@ -158,6 +169,6 @@ mod day_test {
     fn it_can_solve_example_part_2() {
         let parsed = parse_input(EXAMPLE.to_string());
         let result = solve_two(parsed);
-        assert_eq!(result, 4);
+        assert_eq!(result, 93);
     }
 }
