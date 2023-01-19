@@ -200,6 +200,16 @@ but broke the rest of behaviours.
 I managed to get it to almost work, 
 but I might skip that second star for now.
 
+## Day 13
 
+So it's the 19th in reality.
+Last week was harsh and I didn't have the time or the energy to put into the challenge.
+I'll probably do them in January.
+Also, I spent 30mn just trying to get a good parsing of the problem in Rust
+when I know I can get it in one function in Python.
+So I'll try and switch to Python, my main language.
+I'll try to be more lenient on the problems and how I solve them.
 
-
+Using Python is much easier, 
+and I'm getting back that feeling of joy from focusing only on the problem.
+First part done in one try.
