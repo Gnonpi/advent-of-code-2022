@@ -235,3 +235,25 @@ The second part is about adding a line
 at the bottom of the grid.
 Adding a floor a bit brutally, but it's working.
 I had a one-off error and had to retry once.
+
+## Day 15 
+
+I'm not entirely sure how to solve this problem on first approach.
+Let's first parse and store the results.
+It's parsing ok.
+Now we want to get the number of positions at `y` where beacons cannot be.
+That is, the number of positions at `y` already covered by signals.
+A position is covered by a signal if it's between a sensor and its beacon.
+So we can go over the sensors, 
+compute their radius (distance between sensor and beacon),
+check if they reach `y` (drop many too high or too low),
+then for each sensor, check their coverage on the line.
+But the coverage is unique (two sensors covering same point is only one more).
+How to compute the diamond-shaped coverage of a sensor?
+It would be going over the square formed with the distance,
+and checking one by one.
+After solving some usize<->isize issues, I managed to get something that compiled.
+But in the example, I get 27 instead of 26.
+It's because I need to remove beacons that are on the line.
+And then it's working, but it's slow when solving.
+But it's right on the first try.
